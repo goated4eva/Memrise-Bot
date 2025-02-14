@@ -15,12 +15,12 @@ pyautogui.PAUSE = 0
 HINT_IMAGE_PATH = "hint_button.PNG"  # Use uppercase .PNG
 
 # Define the RGB color of the "Correct" button
-CORRECT_COLOR = (0, 167, 120)  # Cyan-green color
+CORRECT_COLOR = (0, 167, 120)  # Cyan-green color 
 COLOR_TOLERANCE = 10  # Allow slight variations in color
 
 # Define the coordinates to check after the 9th click
-CHECK_COORDINATES = (1411, 341)  # (x, y)
-FALLBACK_COORDINATES = (576, 950)  # (x, y)
+CHECK_COORDINATES = (1411, 341)  # (x, y) of the correct! button
+FALLBACK_COORDINATES = (576, 950)  # (x, y) of the classic review button 
 
 def take_screenshot():
     """Take a screenshot of the screen."""
@@ -156,7 +156,7 @@ toggle_button = Button(root, text="Toggle", command=toggle_program_state, font=(
 toggle_button.pack(pady=10)
 
 # Listen for F9 keypress
-keyboard.on_press_key("Z", on_f9_press)
+keyboard.on_press_key("Z", on_f9_press) # if you want to check the keybind, ONLY CHANGE "Z"
 
 # Run the UI
 root.mainloop()
