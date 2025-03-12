@@ -9,9 +9,7 @@ REVIEW THAT WORD AND COUNT HOW MANY TIMES YOU NEED TO CLICK FOR THE LESSON TO EN
 IF YOU NEED HELP WATCH GO TO https://www.youtube.com/@Gridzontop
 
 RUN THESE COMMANDS IN CMD OR TERMINAL
-pip install pyautogui
-pip install keyboard
-pip install pillow
+pip install pyautogui opencv-python keyboard pillow
 sudo apt-get install python3-tk (USE FOR LINUX)
 
 lines 22-23 main.py read the hashtag and get the coordinates of the buttons by running main.py 
