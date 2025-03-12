@@ -6,7 +6,7 @@ PRESS IGNORE ALL AND UNCHECK ONE WORD
 REVIEW THAT WORD AND COUNT HOW MANY TIMES YOU NEED TO CLICK FOR THE LESSON TO END
 
 RUN THIS COMMAND IN CMD OR TERMINAL
-pip install pyautogui
+pip install opencv-python-headless
 
 Lines 8-11 on main.py:
 run coordinates.py and place the mouse cursor over the buttons you want to find the coordinates of
