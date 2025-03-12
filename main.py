@@ -3,35 +3,35 @@ import time
 import threading
 from tkinter import Tk, Button, Label, StringVar
 import keyboard  # Library to detect keypresses
-
+ 
 # Global variables to control the program state
 program_active = False
 paused = False
-
+ 
 # Set pyautogui to have no delay between actions
 pyautogui.PAUSE = 0
-
+ 
 # Path to the image of the "Hint" button
 HINT_IMAGE_PATH = "hint_button.PNG"  # Use uppercase .PNG
-
+ 
 # Define the RGB color of the "Correct" button
+# CORRECT_COLOR = (0, 167, 120)  # Cyan-green color
 CORRECT_COLOR = (0, 167, 120)  # Cyan-green color 
 COLOR_TOLERANCE = 10  # Allow slight variations in color
-
+ 
 # Define the coordinates to check after the 9th click
+CHECK_COORDINATES = (1411, 341)  # (x, y)
+FALLBACK_COORDINATES = (576, 950)  # (x, y)
 CHECK_COORDINATES = (1411, 341)  # (x, y) of the correct! button
 FALLBACK_COORDINATES = (576, 950)  # (x, y) of the classic review button 
-
+ 
 def take_screenshot():
-    """Take a screenshot of the screen."""
-    screenshot = pyautogui.screenshot()
-    return screenshot
-
+     """Take a screenshot of the screen."""
+     screenshot = pyautogui.screenshot()
+     return screenshot
+ 
 def find_button(image_path):
-    """
-    Locate a button on the screen using image recognition.
-    Returns the coordinates of the button if found, otherwise None.
-    """
+# Locate a button on the screen using image recognition. Returns the coordinates of the button if found, otherwise None.
     try:
         print(f"Looking for button: {image_path}")
         button_location = pyautogui.locateOnScreen(image_path, confidence=0.7)  # Lower confidence
@@ -44,12 +44,9 @@ def find_button(image_path):
     except Exception as e:
         print(f"Error finding button: {e}")
         return None
-
+ 
 def get_pixel_color(x, y):
-    """
-    Get the color of the pixel at the specified coordinates.
-    Returns the RGB color as a tuple.
-    """
+    # Get the color of the pixel at the specified coordinates. Returns the RGB color as a tuple.
     try:
         screenshot = take_screenshot()
         pixel_color = screenshot.getpixel((x, y))
@@ -57,11 +54,11 @@ def get_pixel_color(x, y):
     except Exception as e:
         print(f"Error getting pixel color: {e}")
         return None
-
+ 
 def click_target_positions():
-    """Click at the predefined positions in the specified order."""
+    #Click at the predefined positions in the specified order.
     global paused
-
+ 
     # Find the "Hint" button dynamically
     hint_position = find_button(HINT_IMAGE_PATH)
     if not hint_position:
@@ -71,7 +68,7 @@ def click_target_positions():
         pyautogui.click()
         print(f"Clicked fallback coordinates: {FALLBACK_COORDINATES}")
         return
-
+ 
     # Click Hint 9 times
     for i in range(1, 10):  # Loop from 1 to 9
         if not program_active or paused:  # Stop if program is toggled off or paused
@@ -81,11 +78,11 @@ def click_target_positions():
         print(f"Clicked 'Hint' ({i}/9)...")
         if i == 9:
             time.sleep(0.1)  # Small delay between clicks
-
+ 
     # Move to the coordinates (x=1411, y=341)
     pyautogui.moveTo(CHECK_COORDINATES[0], CHECK_COORDINATES[1])
     print(f"Moved to coordinates: {CHECK_COORDINATES}")
-
+ 
     # Check the color at the coordinates
     pixel_color = get_pixel_color(CHECK_COORDINATES[0], CHECK_COORDINATES[1])
     if pixel_color and all(abs(pixel_color[i] - CORRECT_COLOR[i]) <= COLOR_TOLERANCE for i in range(3)):
@@ -104,11 +101,11 @@ def click_target_positions():
             pyautogui.moveTo(FALLBACK_COORDINATES[0], FALLBACK_COORDINATES[1])
             pyautogui.click()
             print(f"Clicked fallback coordinates: {FALLBACK_COORDINATES}")
-
+ 
 def toggle_program_state():
-    """Toggle the program state on/off or pause/resume."""
+    # Toggle the program state on/off or pause/resume.
     global program_active, paused
-
+ 
     if not program_active:
         # Start the program if it's not active
         program_active = True
@@ -128,35 +125,35 @@ def toggle_program_state():
             paused = True
             status_var.set("Program is PAUSED")
             print("Program paused.")
-
-# Function to handle F9 keypress
-def on_f9_press(event):
-    """Toggle program state when F9 is pressed."""
+ 
+# Function to handle Z keypress
+def on_z_press(event):
+    # Toggle program state when Z is pressed.
     toggle_program_state()
-
+ 
 def run_program_logic():
-    """Run the program logic in a loop."""
+    # Run the program logic in a loop.
     while program_active:
         if not paused:
             click_target_positions()
-
+ 
 # Create the UI
 root = Tk()
 root.title("Auto Memrise Bot")
 root.geometry("300x150")
-
+ 
 # Status label
 status_var = StringVar()
 status_var.set("Program is OFF")
 status_label = Label(root, textvariable=status_var, font=("Arial", 14))
 status_label.pack(pady=10)
-
+ 
 # Toggle button
 toggle_button = Button(root, text="Toggle", command=toggle_program_state, font=("Arial", 12))
 toggle_button.pack(pady=10)
-
-# Listen for F9 keypress
-keyboard.on_press_key("Z", on_f9_press) # if you want to check the keybind, ONLY CHANGE "Z"
-
+ 
+# Listen for Z keypress
+keyboard.on_press_key("Z", on_z_press) # if you want to check the keybind, ONLY CHANGE "Z"
+ 
 # Run the UI
 root.mainloop()
